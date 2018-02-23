@@ -22,8 +22,11 @@ class PageController extends Controller
     }
 
 
-    public function addPage()
+    public function addPage(Request $request)
     {
+        if($request->isMethod('post')) {
+
+        }
 
 
         $data = [];

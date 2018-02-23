@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <form action="/">
+                <form action="{{ route('addPage') }}" method="post">
                     <div class="form-group">
                         <label for="slug">Slug</label>
                         <input name="slug" type="text" class="form-control" id="slug">
