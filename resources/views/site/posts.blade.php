@@ -5,14 +5,12 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="list-group">
-                        <a href="/pages/add" class="list-group-item list-group-item-action active">
-                            Новая страница
-                        </a>
+                    {!! link_to_route('addPost', 'Новая статья', [], ['class'=>'list-group-item list-group-item-action active']) !!}
                 </div>
                 <div class="list-group">
-                    @foreach($pages as $page)
-                        <a href="/{{ $page->slug }}" class="list-group-item list-group-item-action">
-                            {{ $page->title }}
+                    @foreach($posts as $post)
+                        <a href="/posts/{{ $post->slug }}" class="list-group-item list-group-item-action">
+                            {{ $post->title }}
                         </a>
                     @endforeach
                 </div>

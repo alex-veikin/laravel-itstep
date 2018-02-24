@@ -11,14 +11,15 @@
 |
 */
 
-Route::get('/', 'PageController@index');
+Route::get('/', 'PostController@index');
 
-Route::group(['prefix' => 'pages'], function () {
-    Route::get('/', 'PageController@pagesAll')->name('allPages');
-    Route::match(['get', 'post'], 'add', 'PageController@addPage')->name('addPage');
+Route::group(['prefix' => 'posts'], function () {
+    Route::get('/', 'PostController@index')->name('allPosts');
+    Route::get('add', 'PostController@create')->name('addPost');
+    Route::post('add', 'PostController@store')->name('savePost');
+    Route::get('{slug}', 'PostController@show');
 });
 
-Route::get('{slug}', 'PageController@page');
 
 Auth::routes();
 
