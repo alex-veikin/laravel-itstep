@@ -18,11 +18,7 @@ class PostController extends Controller
     {
         $posts = Post::all();
 
-        $data = [
-            'posts' => $posts,
-        ];
-
-        return view('site.posts', $data);
+        return view('site.posts', compact('posts'));
     }
 
     /**
@@ -47,20 +43,22 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'slug'    => 'required|max:20|alpha|unique:posts,slug',
-            'title'   => 'required|max:255',
+            'slug' => 'required|max:20|alpha|unique:posts,slug',
+            'title' => 'required|max:255',
             'content' => 'required',
         ]);
 
-            Post::make($request->except(['_token']))->save();
+        if (Post::create($request->all())) {
+            return redirect()->route('allPosts')->with('status', 'Информация успешно добавлена.');
+        }
 
-            return redirect()->route('allPosts');
+        return back()->with('status', 'Ошибка!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  string $slug
      *
      * @return \Illuminate\Http\Response
      */
@@ -68,11 +66,7 @@ class PostController extends Controller
     {
         $post = Post::all()->where('slug', $slug)->first();
 
-        $data = [
-            'post' => $post,
-        ];
-
-        return view('site.post', $data);
+        return view('site.post', compact('post'));
     }
 
     /**
@@ -84,32 +78,34 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::all()->find($id);
+        $post = Post::find($id);
 
-        $data = ['post'=>$post];
-
-        return view('site.post_edit', $data);
+        return view('site.post_edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'slug'    => 'required|max:20|alpha|unique:posts,slug',
-            'title'   => 'required|max:255',
+            'slug' => 'required|max:20|alpha|unique:posts,slug,' . $id,
+            'title' => 'required|max:255',
             'content' => 'required',
         ]);
 
-        Post::make($request->except(['_token']))->save();
+        $input = $request->except(['_token']);
 
-        return redirect()->route('allPosts');
+        if (Post::find($id)->fill($input)->update()) {
+            return redirect()->route('allPosts')->with('status', 'Информация успешно обновлена.');
+        }
+
+        return back()->with('status', 'Ошибка!');
     }
 
     /**
@@ -119,8 +115,16 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        if ($request->isMethod('post')) {
+            if (Post::destroy($id)) {
+                return redirect()->route('allPosts')->with('status', 'Пункт успешно удален.');
+            }
+
+            return back()->with('status', 'Ошибка!');
+        }
+
+        return view('site.post_delete', compact('id'));
     }
 }

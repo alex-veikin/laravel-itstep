@@ -4,15 +4,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
+                @if( session()->has('status') )
+                    <div class="alert alert-info" role="alert">{{ session('status') }}</div>
+                @endif
+
                 <div class="list-group">
                     {!! link_to_route('allPosts', 'Назад', [], ['class'=>'list-group-item list-group-item-action active']) !!}
                 </div>
 
-                {!! Form::open(['route'=>'savePost', 'method'=>'post']) !!}
+                {!! Form::model($post, ['route'=>['updatePost', $post->id]]) !!}
                 {!! Form::token() !!}
                 <div class="form-group">
                     {!! Form::label('slug', 'Slug') !!}
-                    {!! Form::text('slug', old('slug', $post->slug), ['class'=>'form-control', 'id'=>'slug']) !!}
+                    {!! Form::text('slug', old('slug'), ['class'=>'form-control', 'id'=>'slug']) !!}
                 </div>
                 <div class="form-group">
                     {!! Form::label('title', 'Название') !!}
@@ -27,7 +31,7 @@
                         <div class="alert alert-danger" role="alert">{{ $error }}</div>
                     @endforeach
                 </div>
-                {!! Form::submit('Добавить', ['class'=>'btn btn-primary']) !!}
+                {!! Form::submit('Сохранить изменения', ['class'=>'btn btn-primary']) !!}
                 {!! Form::close() !!}
             </div>
         </div>

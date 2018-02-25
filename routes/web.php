@@ -11,15 +11,18 @@
 |
 */
 
-Route::get('/', 'PostController@index');
+Route::get('/', 'HomeController@allPosts');
 
-Route::group(['prefix' => 'posts'], function () {
-    Route::get('/', 'PostController@index')->name('allPosts');
-    Route::get('{slug}', 'PostController@show')->name('showPost');
-    Route::get('add', 'PostController@create')->name('addPost');
-    Route::post('add', 'PostController@store')->name('savePost');
-    Route::get('edit/{id}', 'PostController@edit')->name('editPost');
-    Route::get('delete/{id}', 'PostController@destroy')->name('deletePost');
+Route::group(['prefix' => 'admin', 'middleware'=>'auth'], function () {
+    Route::group(['prefix'=>'posts'], function () {
+        Route::get('/', 'PostController@index')->name('allPosts');
+        Route::get('post-{slug}', 'PostController@show')->name('showPost');
+        Route::get('add', 'PostController@create')->name('addPost');
+        Route::post('add', 'PostController@store')->name('savePost');
+        Route::get('edit/{id}', 'PostController@edit')->name('editPost');
+        Route::post('edit/{id}', 'PostController@update')->name('updatePost');
+        Route::match(['get', 'post'],'delete/{id}', 'PostController@destroy')->name('deletePost');
+    });
 });
 
 
