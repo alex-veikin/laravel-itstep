@@ -9,9 +9,13 @@
                 </div>
                 <div class="list-group">
                     @foreach($posts as $post)
-                        <a href="/posts/{{ $post->slug }}" class="list-group-item list-group-item-action">
-                            {{ $post->title }}
-                        </a>
+                        <div class="list-group-item">
+                            {!! link_to_route('showPost', $post->title, [$post->slug], ['class'=>'']) !!}
+                            <span class="pull-right">
+                                {!! link_to_route('editPost', 'Редактировать', [$post->id], ['class'=>'badge badge-success']) !!}
+                                {!! link_to_route('deletePost', 'Удалить', [$post->id], ['class'=>'badge badge-danger']) !!}
+                            </span>
+                        </div>
                     @endforeach
                 </div>
             </div>

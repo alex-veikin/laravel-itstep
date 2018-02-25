@@ -19,8 +19,8 @@
                     {!! Form::text('title', old('title'), ['class'=>'form-control', 'id'=>'title']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::label('content', 'Контент') !!}
-                    {!! Form::textarea('content', old('content'), ['class'=>'form-control', 'id'=>'content']) !!}
+                    {!! Form::label('ckeditor', 'Контент') !!}
+                    {!! Form::textarea('content', old('content'), ['class'=>'form-control', 'id'=>'ckeditor']) !!}
                 </div>
                 <div class="form-group">
                     @foreach ($errors->all() as $error)

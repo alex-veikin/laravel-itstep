@@ -15,9 +15,11 @@ Route::get('/', 'PostController@index');
 
 Route::group(['prefix' => 'posts'], function () {
     Route::get('/', 'PostController@index')->name('allPosts');
+    Route::get('{slug}', 'PostController@show')->name('showPost');
     Route::get('add', 'PostController@create')->name('addPost');
     Route::post('add', 'PostController@store')->name('savePost');
-    Route::get('{slug}', 'PostController@show');
+    Route::get('edit/{id}', 'PostController@edit')->name('editPost');
+    Route::get('delete/{id}', 'PostController@destroy')->name('deletePost');
 });
 
 

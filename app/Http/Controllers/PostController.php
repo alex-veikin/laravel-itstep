@@ -34,11 +34,7 @@ class PostController extends Controller
      */
     public function create(Request $request)
     {
-
-
-        $data = [];
-
-        return view('site.post_add', $data);
+        return view('site.post_add');
     }
 
     /**
@@ -51,7 +47,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'slug'    => 'required|max:20|alpha|unique:posts',
+            'slug'    => 'required|max:20|alpha|unique:posts,slug',
             'title'   => 'required|max:255',
             'content' => 'required',
         ]);
@@ -88,7 +84,11 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::all()->find($id);
+
+        $data = ['post'=>$post];
+
+        return view('site.post_edit', $data);
     }
 
     /**
@@ -101,7 +101,15 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'slug'    => 'required|max:20|alpha|unique:posts,slug',
+            'title'   => 'required|max:255',
+            'content' => 'required',
+        ]);
+
+        Post::make($request->except(['_token']))->save();
+
+        return redirect()->route('allPosts');
     }
 
     /**
